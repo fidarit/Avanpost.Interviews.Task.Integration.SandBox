@@ -44,6 +44,16 @@ namespace Avanpost.Interviews.Task.Integration.SandBox.Connector
             dataContext.SaveChanges();
         }
 
+        public bool IsUserExists(string userLogin)
+        {
+            Logger.Debug($"Проверка на существование пользователя: {userLogin}");
+
+            using var dataContext = contextFactory.GetContext();
+
+            return dataContext.Users.Any(t => t.Login == userLogin);
+        }
+
+        #region Свойства
         public IEnumerable<Property> GetAllProperties()
         {
             Logger.Debug("Получение всех свойств.");
@@ -58,25 +68,25 @@ namespace Avanpost.Interviews.Task.Integration.SandBox.Connector
             throw new NotImplementedException();
         }
 
-        public bool IsUserExists(string userLogin)
-        {
-            Logger.Debug($"Проверка на существование пользователя: {userLogin}");
-
-            using var dataContext = contextFactory.GetContext();
-
-            return dataContext.Users.Any(t => t.Login == userLogin);
-        }
-
         public void UpdateUserProperties(IEnumerable<UserProperty> properties, string userLogin)
         {
             Logger.Debug($"Обновление свойств пользователя: {userLogin}");
 
             throw new NotImplementedException();
         }
+        #endregion
 
+        #region Права
         public IEnumerable<Permission> GetAllPermissions()
         {
             Logger.Debug("Получение списка всех прав.");
+
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<string> GetUserPermissions(string userLogin)
+        {
+            Logger.Debug($"Получение прав пользователя: {userLogin}");
 
             throw new NotImplementedException();
         }
@@ -94,12 +104,6 @@ namespace Avanpost.Interviews.Task.Integration.SandBox.Connector
 
             throw new NotImplementedException();
         }
-
-        public IEnumerable<string> GetUserPermissions(string userLogin)
-        {
-            Logger.Debug($"Получение прав пользователя: {userLogin}");
-
-            throw new NotImplementedException();
-        }
+        #endregion
     }
 }
