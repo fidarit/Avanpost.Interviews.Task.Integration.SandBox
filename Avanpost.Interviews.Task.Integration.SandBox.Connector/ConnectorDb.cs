@@ -20,7 +20,7 @@ namespace Avanpost.Interviews.Task.Integration.SandBox.Connector
 
         public void CreateUser(UserToCreate user)
         {
-            Logger.Debug($"Creating user: {user.Login}");
+            Logger.Debug($"Создание пользователя: {user.Login}");
 
             using var dataContext = contextFactory.GetContext();
             var password = new Sequrity() 
@@ -46,56 +46,58 @@ namespace Avanpost.Interviews.Task.Integration.SandBox.Connector
 
         public IEnumerable<Property> GetAllProperties()
         {
-            Logger.Debug("Fetching all properties.");
+            Logger.Debug("Получение всех свойств.");
 
             throw new NotImplementedException();
         }
 
         public IEnumerable<UserProperty> GetUserProperties(string userLogin)
         {
-            Logger.Debug($"Getting properties for user: {userLogin}");
+            Logger.Debug($"Получение всех свойств пользователя: {userLogin}");
 
             throw new NotImplementedException();
         }
 
         public bool IsUserExists(string userLogin)
         {
-            Logger.Debug($"Checking for the existence of a {userLogin} user.");
+            Logger.Debug($"Проверка на существование пользователя: {userLogin}");
 
-            throw new NotImplementedException();
+            using var dataContext = contextFactory.GetContext();
+
+            return dataContext.Users.Any(t => t.Login == userLogin);
         }
 
         public void UpdateUserProperties(IEnumerable<UserProperty> properties, string userLogin)
         {
-            Logger.Debug($"Updating properties for user: {userLogin}");
+            Logger.Debug($"Обновление свойств пользователя: {userLogin}");
 
             throw new NotImplementedException();
         }
 
         public IEnumerable<Permission> GetAllPermissions()
         {
-            Logger.Debug("Fetching all permissions.");
+            Logger.Debug("Получение списка всех прав.");
 
             throw new NotImplementedException();
         }
 
         public void AddUserPermissions(string userLogin, IEnumerable<string> rightIds)
         {
-            Logger.Debug($"Adding permissions to user: {userLogin}");
+            Logger.Debug($"Добавление прав пользователю: {userLogin}");
 
             throw new NotImplementedException();
         }
 
         public void RemoveUserPermissions(string userLogin, IEnumerable<string> rightIds)
         {
-            Logger.Debug($"Removing permissions from user: {userLogin}");
+            Logger.Debug($"Изъятие прав у пользователя: {userLogin}");
 
             throw new NotImplementedException();
         }
 
         public IEnumerable<string> GetUserPermissions(string userLogin)
         {
-            Logger.Debug($"Getting permissions for user: {userLogin}");
+            Logger.Debug($"Получение прав пользователя: {userLogin}");
 
             throw new NotImplementedException();
         }
