@@ -23,21 +23,10 @@ namespace Avanpost.Interviews.Task.Integration.SandBox.Connector
             Logger.Debug($"Создание пользователя: {user.Login}");
 
             using var dataContext = contextFactory.GetContext();
-            var password = new Sequrity() 
-            { 
-                UserId = user.Login, 
-                Password = user.HashPassword 
-            };
+            var password = new Sequrity();
+            var newUser = new User();
 
-            var newUser = new User()
-            {
-                Login = user.Login,
-                IsLead = user.Properties.GetBoolOrNull(nameof(User.IsLead)) ?? false,
-                FirstName   = user.Properties.GetStringOrNull(nameof(User.FirstName))   ?? string.Empty,
-                MiddleName  = user.Properties.GetStringOrNull(nameof(User.MiddleName))  ?? string.Empty,
-                LastName    = user.Properties.GetStringOrNull(nameof(User.LastName))    ?? string.Empty,
-                TelephoneNumber = user.Properties.GetStringOrNull(nameof(User.TelephoneNumber)) ?? string.Empty,
-            };
+            PropertiesTransformer.SetUserProperties(user, ref newUser, ref password);
 
             dataContext.Users.Add(newUser);
             dataContext.Passwords.Add(password);
@@ -58,21 +47,31 @@ namespace Avanpost.Interviews.Task.Integration.SandBox.Connector
         {
             Logger.Debug("Получение всех свойств.");
 
-            throw new NotImplementedException();
+            return PropertiesTransformer.GetPropertyDescriptions();
         }
 
         public IEnumerable<UserProperty> GetUserProperties(string userLogin)
         {
             Logger.Debug($"Получение всех свойств пользователя: {userLogin}");
 
-            throw new NotImplementedException();
+            using var dataContext = contextFactory.GetContext();
+            var user = dataContext.Users.FirstOrDefault(t => t.Login == userLogin) ?? throw new Exception($"Пользователь не найден: {userLogin}");
+            var password = dataContext.Passwords.Single(u => u.UserId == userLogin);
+
+            return PropertiesTransformer.GetUserProperties(user, password);
         }
 
         public void UpdateUserProperties(IEnumerable<UserProperty> properties, string userLogin)
         {
             Logger.Debug($"Обновление свойств пользователя: {userLogin}");
 
-            throw new NotImplementedException();
+            using var dataContext = contextFactory.GetContext();
+            var user = dataContext.Users.FirstOrDefault(t => t.Login == userLogin) ?? throw new Exception($"Пользователь не найден: {userLogin}");
+            var password = dataContext.Passwords.Single(u => u.UserId == userLogin);
+
+            PropertiesTransformer.SetUserProperties(properties, ref user, ref password);
+
+            dataContext.SaveChanges();
         }
         #endregion
 
